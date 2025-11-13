@@ -2,69 +2,77 @@ package com.tasks.manager.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Task {
 
-	private Long Id;
-	private String Title;
-	private String Description;
-	private int Priority;
-	private boolean Done;
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	private String title;
+	private String description;
+	private int priority;
+	private boolean done;
 
 	public Task() {
 		// Required for serialization/deserialization
 	}
 
 	public Task(Long id, String title, String description, int priority, boolean done) {
-		Id = id;
-		Title = title;
-		Description = description;
-		Priority = priority;
-		Done = done;
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.priority = priority;
+		this.done = done;
 	}
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		this.id = id;
 	}
 
 	public String getTitle() {
-		return Title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		Title = title;
+		this.title = title;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 	public int getPriority() {
-		return Priority;
+		return priority;
 	}
 
 	public void setPriority(int priority) {
-		Priority = priority;
+		this.priority = priority;
 	}
 
 	public boolean isDone() {
-		return Done;
+		return done;
 	}
 
 	public void setDone(boolean done) {
-		Done = done;
+		this.done = done;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(Description, Done, Id, Priority, Title);
+		return Objects.hash(description, done, id, priority, title);
 	}
 
 	@Override
@@ -76,13 +84,13 @@ public class Task {
 		if (getClass() != obj.getClass())
 			return false;
 		Task other = (Task) obj;
-		return Objects.equals(Description, other.Description) && Done == other.Done && Objects.equals(Id, other.Id)
-				&& Priority == other.Priority && Objects.equals(Title, other.Title);
+		return Objects.equals(description, other.description) && done == other.done && Objects.equals(id, other.id)
+				&& priority == other.priority && Objects.equals(title, other.title);
 	}
 
 	@Override
 	public String toString() {
-		return "Task [Id=" + Id + ", Title=" + Title + ", Description=" + Description + ", Priority=" + Priority
-				+ ", Done=" + Done + "]";
+		return "Task [id=" + id + ", title=" + title + ", description=" + description + ", priority=" + priority
+				+ ", done=" + done + "]";
 	}
 }
