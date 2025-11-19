@@ -99,4 +99,15 @@ public class TaskRepositoryTest {
 		List<Task> tasks = repository.findAllTasksWithHighPriority(7);
 		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
 	}
+	
+	@Test
+	public void testFindAllTasksWithHighPriorityAndDone() {
+		Task taskShouldBeFound1 = mongoTemplate.save(new Task(null, "test1", "test1", 10, false));
+		Task taskShouldBeFound2 = mongoTemplate.save(new Task(null, "test2", "test2", 9, false));
+
+		mongoTemplate.save(new Task(null, "test", "test", 8, true)); // Should Not Be Found
+
+		List<Task> tasks = repository.findByPriorityGreaterThanAndDone(7, false);
+		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
+	}
 }
