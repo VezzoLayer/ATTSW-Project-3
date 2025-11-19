@@ -6,4 +6,6 @@ import com.tasks.manager.model.Task;
 
 public interface TaskRepository extends MongoRepository<Task, String> {
 
+	Task findByTitle(String string);
+
 }
