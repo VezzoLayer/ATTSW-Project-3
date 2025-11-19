@@ -1,13 +1,17 @@
 package com.tasks.manager.repositories;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.tasks.manager.model.Task;
 
 public interface TaskRepository extends MongoRepository<Task, String> {
 
-	Task findByTitle(String string);
+	Task findByTitle(String title);
 
-	Task findByDescription(String string);
+	Task findByDescription(String description);
+
+	List<Task> findByPriority(int priority);
 
 }
