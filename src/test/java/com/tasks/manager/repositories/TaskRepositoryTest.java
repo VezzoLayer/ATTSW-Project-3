@@ -45,4 +45,12 @@ public class TaskRepositoryTest {
 		Task taskFound = repository.findByTitle("dentist");
 		assertThat(taskFound).isEqualTo(taskShouldBeFound);
 	}
+	
+	@Test
+	public void testFindTaskByDescription() {
+		Task taskShouldBeFound = mongoTemplate.save(new Task(null, "test", "monday 10am", 10, true));
+
+		Task taskFound = repository.findByDescription("monday 10am");
+		assertThat(taskFound).isEqualTo(taskShouldBeFound);
+	}
 }

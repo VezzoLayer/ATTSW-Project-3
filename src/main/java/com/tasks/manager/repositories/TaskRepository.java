@@ -8,4 +8,6 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 
 	Task findByTitle(String string);
 
+	Task findByDescription(String string);
+
 }
