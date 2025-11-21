@@ -29,6 +29,38 @@
 
 	<properties>
 		<java.version>17</java.version>
+		
+		<!-- Configurazione Sonar -->
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.organization>vezzolayer</sonar.organization>
+		<sonar.projectKey>VezzoLayer_ATTSW-Project-3</sonar.projectKey>
+		<!-- Locazione report Jacoco -->
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${project.reporting.outputDirectory}/jacoco/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>
+		<!-- Include UT e IT -->
+		<sonar.junit.reportPaths>
+			${project.build.directory}/surefire-reports,
+			${project.build.directory}/failsafe-reports
+		</sonar.junit.reportPaths>
+		<!-- Scan di ulteriori files -->
+		<sonar.sources>
+			pom.xml,
+			${project.build.sourceDirectory},
+			${basedir}/src/main/resources
+		</sonar.sources>
+		<!-- Rileva ulteriori tests configurati nel build-helper-maven-plugin -->
+		<sonar.tests>
+			${project.build.testSourceDirectory}
+			<!-- ${basedir}/src/it/java, -->
+			<!-- ${basedir}/src/bdd/java -->
+		</sonar.tests>
+		<!-- Esclude Model e Application -->
+		<sonar.coverage.exclusions>
+			**/model/*,
+			**/TasksManagerApplication.*
+		</sonar.coverage.exclusions>
+		
 	</properties>
 
 	<dependencies>
@@ -149,7 +181,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.13</version>
+					<version>0.8.14</version>
 					<configuration>
 						<excludes>
 							<exclude>**/TasksManagerApplication.*</exclude>
@@ -200,6 +232,11 @@
 						<version>2.3.1</version>
 					</dependency>
 					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>5.3.0.6276</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
