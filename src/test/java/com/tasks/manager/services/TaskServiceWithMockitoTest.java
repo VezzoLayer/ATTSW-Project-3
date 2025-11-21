@@ -2,6 +2,7 @@ package com.tasks.manager.services;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -41,5 +42,12 @@ public class TaskServiceWithMockitoTest {
 		when(taskRepository.findById("t")).thenReturn(Optional.of(task));
 
 		assertThat(taskService.getTaskById("t")).isSameAs(task);
+	}
+
+	@Test
+	public void testGetTaskByIdWhenNotFound() {
+		when(taskRepository.findById(anyString())).thenReturn(Optional.empty());
+
+		assertThat(taskService.getTaskById("t")).isNull();
 	}
 }
