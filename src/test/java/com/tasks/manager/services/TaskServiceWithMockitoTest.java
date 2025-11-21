@@ -4,6 +4,8 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,5 +32,14 @@ public class TaskServiceWithMockitoTest {
 		when(taskRepository.findAll()).thenReturn(asList(task1, task2));
 
 		assertThat(taskService.getAllTasks()).containsExactly(task1, task2);
+	}
+
+	@Test
+	public void testGetTaskByIdWhenFound() {
+		Task task = new Task("t", "test", "test", 10, true);
+
+		when(taskRepository.findById("t")).thenReturn(Optional.of(task));
+
+		assertThat(taskService.getTaskById("t")).isSameAs(task);
 	}
 }
