@@ -99,7 +99,7 @@ public class TaskRepositoryTest {
 		List<Task> tasks = repository.findAllTasksWithHighPriority(7);
 		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
 	}
-	
+
 	@Test
 	public void testFindAllTasksWithHighPriorityAndDone() {
 		Task taskShouldBeFound1 = mongoTemplate.save(new Task(null, "test1", "test1", 10, false));
@@ -109,5 +109,17 @@ public class TaskRepositoryTest {
 
 		List<Task> tasks = repository.findByPriorityGreaterThanAndDone(7, false);
 		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
+	}
+
+	@Test
+	public void testFindTasksByPriorityDescendingOrder() {
+		Task taskMedium = mongoTemplate.save(new Task(null, "Medio", "desc", 5, true));
+		Task taskLow = mongoTemplate.save(new Task(null, "Basso", "desc", 1, true));
+		Task taskHigh = mongoTemplate.save(new Task(null, "Alto", "desc", 10, true));
+
+		List<Task> tasks = repository.findAllByOrderByPriorityDesc();
+
+		// containsExactly verifica anche l'ordine
+		assertThat(tasks).containsExactly(taskHigh, taskMedium, taskLow);
 	}
 }

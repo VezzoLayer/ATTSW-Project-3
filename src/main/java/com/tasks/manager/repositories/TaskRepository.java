@@ -26,4 +26,6 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 	// Qui uso convenzioni native per alternare a JSON (sopra)
 	List<Task> findByPriorityGreaterThanAndDone(int priorityThreshold, boolean done);
 
+	List<Task> findAllByOrderByPriorityDesc();
+
 }
