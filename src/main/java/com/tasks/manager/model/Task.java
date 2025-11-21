@@ -2,9 +2,15 @@ package com.tasks.manager.model;
 
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Task {
 
-	private Long id;
+	@Id
+	private String id;
+
 	private String title;
 	private String description;
 	private int priority;
@@ -14,7 +20,7 @@ public class Task {
 		// Required for serialization/deserialization
 	}
 
-	public Task(Long id, String title, String description, int priority, boolean done) {
+	public Task(String id, String title, String description, int priority, boolean done) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -22,11 +28,11 @@ public class Task {
 		this.done = done;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
