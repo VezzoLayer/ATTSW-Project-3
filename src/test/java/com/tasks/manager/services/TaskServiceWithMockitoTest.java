@@ -2,13 +2,17 @@ package com.tasks.manager.services;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -49,5 +53,21 @@ public class TaskServiceWithMockitoTest {
 		when(taskRepository.findById(anyString())).thenReturn(Optional.empty());
 
 		assertThat(taskService.getTaskById("t")).isNull();
+	}
+
+	@Test
+	public void testInsertNewTaskShouldSetIdToNullAndReturnsSavedTask() {
+		Task taskToSave = spy(new Task("t99", "", "", 0, false));
+		Task savedTask = new Task("t1", "saved", "saved", 10, true);
+
+		when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
+
+		Task result = taskService.insertNewTask(taskToSave);
+
+		assertThat(result).isSameAs(savedTask);
+
+		InOrder inOrder = inOrder(taskToSave, taskRepository);
+		inOrder.verify(taskToSave).setId(null);
+		inOrder.verify(taskRepository).save(taskToSave);
 	}
 }

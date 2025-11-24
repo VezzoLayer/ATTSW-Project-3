@@ -20,4 +20,9 @@ public class TaskService {
 	public Task getTaskById(String id) {
 		return taskRepository.findById(id).orElse(null);
 	}
+
+	public Task insertNewTask(Task task) {
+		task.setId(null);
+		return taskRepository.save(task);
+	}
 }
