@@ -17,6 +17,10 @@ public class TaskService {
 		return taskRepository.findAll();
 	}
 
+	public List<Task> getAllTasksByDescendentPriority() {
+		return taskRepository.findAllByOrderByPriorityDesc();
+	}
+
 	public Task getTaskById(String id) {
 		return taskRepository.findById(id).orElse(null);
 	}

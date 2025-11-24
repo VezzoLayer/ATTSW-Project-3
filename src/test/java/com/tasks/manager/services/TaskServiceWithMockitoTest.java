@@ -41,6 +41,16 @@ public class TaskServiceWithMockitoTest {
 	}
 
 	@Test
+	public void testGetAllTasksByPriorityDesc() {
+		Task task1 = new Task("t1", "test", "test", 10, true);
+		Task task2 = new Task("t2", "test", "test", 1, true);
+
+		when(taskRepository.findAllByOrderByPriorityDesc()).thenReturn(asList(task1, task2));
+
+		assertThat(taskService.getAllTasksByDescendentPriority()).containsExactly(task1, task2);
+	}
+
+	@Test
 	public void testGetTaskByIdWhenFound() {
 		Task task = new Task("t", "test", "test", 10, true);
 
