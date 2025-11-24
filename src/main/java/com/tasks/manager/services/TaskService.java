@@ -2,9 +2,12 @@ package com.tasks.manager.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.tasks.manager.model.Task;
 import com.tasks.manager.repositories.TaskRepository;
 
+@Service
 public class TaskService {
 
 	private TaskRepository taskRepository;
