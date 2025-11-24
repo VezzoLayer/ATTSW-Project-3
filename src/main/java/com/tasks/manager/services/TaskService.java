@@ -30,4 +30,8 @@ public class TaskService {
 		replacement.setId(id);
 		return taskRepository.save(replacement);
 	}
+
+	public void deleteTaskById(String id) {
+		taskRepository.deleteById(id);
+	}
 }

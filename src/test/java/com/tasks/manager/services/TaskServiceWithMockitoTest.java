@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -85,5 +86,12 @@ public class TaskServiceWithMockitoTest {
 		InOrder inOrder = inOrder(replacement, taskRepository);
 		inOrder.verify(replacement).setId("t1");
 		inOrder.verify(taskRepository).save(replacement);
+	}
+
+	@Test
+	public void testDeleteTaskById() {
+		taskService.deleteTaskById("t1");
+
+		verify(taskRepository).deleteById("t1");
 	}
 }
