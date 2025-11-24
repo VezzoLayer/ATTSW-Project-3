@@ -70,4 +70,20 @@ public class TaskServiceWithMockitoTest {
 		inOrder.verify(taskToSave).setId(null);
 		inOrder.verify(taskRepository).save(taskToSave);
 	}
+
+	@Test
+	public void testUpdateTaskByIdSetsIdToArgumentAndReturnsSavedTask() {
+		Task replacement = spy(new Task(null, "repl", "repl", 0, false));
+		Task replaced = new Task("t1", "saved", "saved", 10, true);
+
+		when(taskRepository.save(any(Task.class))).thenReturn(replaced);
+
+		Task result = taskService.updateTaskById("t1", replacement);
+
+		assertThat(result).isSameAs(replaced);
+
+		InOrder inOrder = inOrder(replacement, taskRepository);
+		inOrder.verify(replacement).setId("t1");
+		inOrder.verify(taskRepository).save(replacement);
+	}
 }

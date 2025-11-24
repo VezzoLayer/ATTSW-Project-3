@@ -25,4 +25,9 @@ public class TaskService {
 		task.setId(null);
 		return taskRepository.save(task);
 	}
+
+	public Task updateTaskById(String id, Task replacement) {
+		replacement.setId(id);
+		return taskRepository.save(replacement);
+	}
 }
