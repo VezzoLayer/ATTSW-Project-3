@@ -23,4 +23,9 @@ public class TaskRestController {
 	public List<Task> allTasks() {
 		return taskService.getAllTasks();
 	}
+
+	@GetMapping("/ordered")
+	public List<Task> allTasksOrdered() {
+		return taskService.getAllTasksByDescendentPriority();
+	}
 }

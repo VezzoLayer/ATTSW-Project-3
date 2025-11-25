@@ -48,4 +48,10 @@ public class TaskRestControllerTest {
 				.andExpect(jsonPath("$[1].title", is("title2"))).andExpect(jsonPath("$[1].description", is("descr2")))
 				.andExpect(jsonPath("$[1].priority", is(10))).andExpect(jsonPath("$[1].done", is(true)));
 	}
+
+	@Test
+	public void testAllTasksOrderedByDescendentPriorityWhenEmpty() throws Exception {
+		this.mvc.perform(get("/api/tasks/ordered").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().json("[]"));
+	}
 }
