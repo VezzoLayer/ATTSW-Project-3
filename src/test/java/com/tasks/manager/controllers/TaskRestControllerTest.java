@@ -2,6 +2,7 @@ package com.tasks.manager.controllers;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -66,5 +67,15 @@ public class TaskRestControllerTest {
 				.andExpect(jsonPath("$[0].done", is(true))).andExpect(jsonPath("$[1].id", is("t2")))
 				.andExpect(jsonPath("$[1].title", is("Low"))).andExpect(jsonPath("$[1].description", is("Low Desc")))
 				.andExpect(jsonPath("$[1].priority", is(5))).andExpect(jsonPath("$[1].done", is(true)));
+	}
+
+	@Test
+	public void testOneTaskByIdWithExistingTask() throws Exception {
+		when(taskService.getTaskById(anyString())).thenReturn(new Task("t1", "title", "descr", 10, true));
+
+		this.mvc.perform(get("/api/tasks/t1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", is("t1"))).andExpect(jsonPath("$.title", is("title")))
+				.andExpect(jsonPath("$.description", is("descr"))).andExpect(jsonPath("$.priority", is(10)))
+				.andExpect(jsonPath("$.done", is(true)));
 	}
 }
