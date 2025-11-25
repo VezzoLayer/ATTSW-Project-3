@@ -54,4 +54,17 @@ public class TaskRestControllerTest {
 		this.mvc.perform(get("/api/tasks/ordered").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().json("[]"));
 	}
+
+	@Test
+	public void testAllTasksOrderedByDescendentPriorityWhenNotEmpty() throws Exception {
+		when(taskService.getAllTasksByDescendentPriority()).thenReturn(
+				asList(new Task("t1", "High", "High Desc", 10, true), new Task("t2", "Low", "Low Desc", 5, true)));
+
+		this.mvc.perform(get("/api/tasks/ordered").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id", is("t1"))).andExpect(jsonPath("$[0].title", is("High")))
+				.andExpect(jsonPath("$[0].description", is("High Desc"))).andExpect(jsonPath("$[0].priority", is(10)))
+				.andExpect(jsonPath("$[0].done", is(true))).andExpect(jsonPath("$[1].id", is("t2")))
+				.andExpect(jsonPath("$[1].title", is("Low"))).andExpect(jsonPath("$[1].description", is("Low Desc")))
+				.andExpect(jsonPath("$[1].priority", is(5))).andExpect(jsonPath("$[1].done", is(true)));
+	}
 }
