@@ -1,7 +1,11 @@
 package com.tasks.manager.controllers;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
@@ -13,6 +17,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
 @RunWith(SpringRunner.class)
@@ -29,5 +34,18 @@ public class TaskRestControllerTest {
 	public void testAllTasksWhenEmpty() throws Exception {
 		this.mvc.perform(get("/api/tasks").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().json("[]"));
+	}
+
+	@Test
+	public void testAllTasksWhenNotEmpty() throws Exception {
+		when(taskService.getAllTasks()).thenReturn(
+				asList(new Task("t1", "title1", "descr1", 5, true), new Task("t2", "title2", "descr2", 10, true)));
+
+		this.mvc.perform(get("/api/tasks").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id", is("t1"))).andExpect(jsonPath("$[0].title", is("title1")))
+				.andExpect(jsonPath("$[0].description", is("descr1"))).andExpect(jsonPath("$[0].priority", is(5)))
+				.andExpect(jsonPath("$[0].done", is(true))).andExpect(jsonPath("$[1].id", is("t2")))
+				.andExpect(jsonPath("$[1].title", is("title2"))).andExpect(jsonPath("$[1].description", is("descr2")))
+				.andExpect(jsonPath("$[1].priority", is(10))).andExpect(jsonPath("$[1].done", is(true)));
 	}
 }
