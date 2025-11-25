@@ -78,4 +78,12 @@ public class TaskRestControllerTest {
 				.andExpect(jsonPath("$.description", is("descr"))).andExpect(jsonPath("$.priority", is(10)))
 				.andExpect(jsonPath("$.done", is(true)));
 	}
+
+	@Test
+	public void testOneTaskByIdWithNotFoundTask() throws Exception {
+		when(taskService.getTaskById(anyString())).thenReturn(null);
+
+		this.mvc.perform(get("/api/tasks/t1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().string(""));
+	}
 }
