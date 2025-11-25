@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -85,5 +86,18 @@ public class TaskRestControllerTest {
 
 		this.mvc.perform(get("/api/tasks/t1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().string(""));
+	}
+
+	@Test
+	public void testPostTask() throws Exception {
+		Task requestBodyTask = new Task(null, "title", "descr", 10, true);
+
+		when(taskService.insertNewTask(requestBodyTask)).thenReturn(new Task("t1", "title", "descr", 10, true));
+
+		this.mvc.perform(post("/api/tasks/new").contentType(MediaType.APPLICATION_JSON)
+				.content("{\"title\":\"title\", \"description\":\"descr\", \"priority\":10, \"done\":\"true\"}")
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.id", is("t1")))
+				.andExpect(jsonPath("$.title", is("title"))).andExpect(jsonPath("$.description", is("descr")))
+				.andExpect(jsonPath("$.priority", is(10))).andExpect(jsonPath("$.done", is(true)));
 	}
 }
