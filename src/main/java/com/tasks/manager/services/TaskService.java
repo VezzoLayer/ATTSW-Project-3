@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.repositories.TaskRepository;
 
@@ -28,9 +29,16 @@ public class TaskService {
 		return taskRepository.findById(id).orElse(null);
 	}
 
-	public Task insertNewTask(Task task) {
-		task.setId(null);
-		return taskRepository.save(task);
+	public Task insertNewTask(TaskDTO taskDTO) {
+		Task persistentTask = new Task();
+
+		persistentTask.setId(null);
+		persistentTask.setTitle(taskDTO.getTitle());
+		persistentTask.setDescription(taskDTO.getDescription());
+		persistentTask.setPriority(taskDTO.getPriority());
+		persistentTask.setDone(taskDTO.isDone());
+
+		return taskRepository.save(persistentTask);
 	}
 
 	public Task updateTaskById(String id, Task replacement) {

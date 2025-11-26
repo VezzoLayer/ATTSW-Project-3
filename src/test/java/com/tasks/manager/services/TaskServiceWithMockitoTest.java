@@ -13,11 +13,14 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.repositories.TaskRepository;
 
@@ -29,6 +32,9 @@ public class TaskServiceWithMockitoTest {
 
 	@InjectMocks
 	private TaskService taskService;
+
+	@Captor
+	private ArgumentCaptor<Task> taskCaptor;
 
 	@Test
 	public void testGetAllTasks() {
@@ -68,7 +74,7 @@ public class TaskServiceWithMockitoTest {
 
 	@Test
 	public void testInsertNewTaskShouldSetIdToNullAndReturnsSavedTask() {
-		Task taskToSave = spy(new Task("t99", "", "", 0, false));
+		TaskDTO taskToSave = new TaskDTO("t99", "to save", "to save", 0, false);
 		Task savedTask = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
@@ -77,9 +83,15 @@ public class TaskServiceWithMockitoTest {
 
 		assertThat(result).isSameAs(savedTask);
 
-		InOrder inOrder = inOrder(taskToSave, taskRepository);
-		inOrder.verify(taskToSave).setId(null);
-		inOrder.verify(taskRepository).save(taskToSave);
+		verify(taskRepository).save(taskCaptor.capture());
+		Task capturedTask = taskCaptor.getValue();
+
+		// Controllo i valori salvati con capture
+		assertThat(capturedTask.getId()).isNull();
+		assertThat(capturedTask.getTitle()).isEqualTo("to save");
+		assertThat(capturedTask.getDescription()).isEqualTo("to save");
+		assertThat(capturedTask.getPriority()).isZero();
+		assertThat(capturedTask.isDone()).isFalse();
 	}
 
 	@Test

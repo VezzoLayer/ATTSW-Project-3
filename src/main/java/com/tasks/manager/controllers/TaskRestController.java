@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
@@ -38,7 +39,7 @@ public class TaskRestController {
 	}
 
 	@PostMapping("/new")
-	public Task newTask(@RequestBody Task task) {
-		return taskService.insertNewTask(task);
+	public Task newTask(@RequestBody TaskDTO taskDTO) {
+		return taskService.insertNewTask(taskDTO);
 	}
 }

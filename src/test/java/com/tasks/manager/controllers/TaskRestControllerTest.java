@@ -19,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
@@ -90,7 +91,7 @@ public class TaskRestControllerTest {
 
 	@Test
 	public void testPostTask() throws Exception {
-		Task requestBodyTask = new Task(null, "title", "descr", 10, true);
+		TaskDTO requestBodyTask = new TaskDTO(null, "title", "descr", 10, true);
 
 		when(taskService.insertNewTask(requestBodyTask)).thenReturn(new Task("t1", "title", "descr", 10, true));
 
