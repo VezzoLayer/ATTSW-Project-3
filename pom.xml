@@ -55,12 +55,16 @@
 			<!-- ${basedir}/src/it/java, -->
 			<!-- ${basedir}/src/bdd/java -->
 		</sonar.tests>
-		<!-- Esclude Model e Application -->
+		<!-- Esclude Model, DTO e Application -->
 		<sonar.coverage.exclusions>
 			**/model/*,
 			**/dto/*,
 			**/TasksManagerApplication.*
 		</sonar.coverage.exclusions>
+		<!-- Esclude DTO -->
+		<sonar.cpd.exclusions>
+			**/dto/*
+		</sonar.cpd.exclusions>	
 		
 	</properties>
 
