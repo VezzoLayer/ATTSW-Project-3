@@ -58,6 +58,7 @@
 		<!-- Esclude Model e Application -->
 		<sonar.coverage.exclusions>
 			**/model/*,
+			**/dto/*,
 			**/TasksManagerApplication.*
 		</sonar.coverage.exclusions>
 		
