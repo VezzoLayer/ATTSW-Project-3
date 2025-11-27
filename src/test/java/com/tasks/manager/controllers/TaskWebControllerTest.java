@@ -1,6 +1,7 @@
 package com.tasks.manager.controllers;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -92,5 +93,13 @@ public class TaskWebControllerTest {
 
 		mvc.perform(get("/edit/t1")).andExpect(view().name("edit")).andExpect(model().attribute("task", task))
 				.andExpect(model().attribute("message", ""));
+	}
+
+	@Test
+	public void testEditTaskWhenTheTaskIsNotFound() throws Exception {
+		when(taskService.getTaskById("t1")).thenReturn(null);
+
+		mvc.perform(get("/edit/t1")).andExpect(view().name("edit")).andExpect(model().attribute("task", nullValue()))
+				.andExpect(model().attribute("message", "No task found with id: t1"));
 	}
 }
