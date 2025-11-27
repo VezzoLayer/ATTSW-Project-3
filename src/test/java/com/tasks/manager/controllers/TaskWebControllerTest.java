@@ -2,9 +2,11 @@ package com.tasks.manager.controllers;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -21,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
@@ -110,5 +113,13 @@ public class TaskWebControllerTest {
 				.andExpect(model().attribute("message", ""));
 
 		verifyNoMoreInteractions(taskService);
+	}
+
+	@Test
+	public void testPostTaskWithoutIdShouldInsertNewTask() throws Exception {
+		mvc.perform(post("/save").param("title", "test title").param("description", "test descr")
+				.param("priority", "10").param("done", "true")).andExpect(view().name("redirect:/"));
+
+		verify(taskService).insertNewTask(new TaskDTO(null, "test title", "test descr", 10, true));
 	}
 }
