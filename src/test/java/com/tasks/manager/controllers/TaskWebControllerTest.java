@@ -122,4 +122,12 @@ public class TaskWebControllerTest {
 
 		verify(taskService).insertNewTask(new TaskDTO(null, "test title", "test descr", 10, true));
 	}
+
+	@Test
+	public void testPostTaskWithIdShouldUpdateExistingTask() throws Exception {
+		mvc.perform(post("/save").param("id", "t1").param("title", "test title").param("description", "test descr")
+				.param("priority", "10").param("done", "true")).andExpect(view().name("redirect:/"));
+
+		verify(taskService).updateTaskById("t1", new TaskDTO("t1", "test title", "test descr", 10, true));
+	}
 }

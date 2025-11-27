@@ -67,8 +67,14 @@ public class TaskWebController {
 	}
 
 	@PostMapping("/save")
-	public String saveUser(TaskDTO taskDTO) {
-		taskService.insertNewTask(taskDTO);
+	public String saveTask(TaskDTO taskDTO) {
+		final String id = taskDTO.getId();
+
+		if (id == null) {
+			taskService.insertNewTask(taskDTO);
+		} else {
+			taskService.updateTaskById(id, taskDTO);
+		}
 
 		return "redirect:/";
 	}
