@@ -41,9 +41,16 @@ public class TaskService {
 		return taskRepository.save(persistentTask);
 	}
 
-	public Task updateTaskById(String id, Task replacement) {
-		replacement.setId(id);
-		return taskRepository.save(replacement);
+	public Task updateTaskById(String id, TaskDTO replacementDTO) {
+		Task replacementePersistent = new Task();
+
+		replacementePersistent.setId(id);
+		replacementePersistent.setTitle(replacementDTO.getTitle());
+		replacementePersistent.setDescription(replacementDTO.getDescription());
+		replacementePersistent.setPriority(replacementDTO.getPriority());
+		replacementePersistent.setDone(replacementDTO.isDone());
+
+		return taskRepository.save(replacementePersistent);
 	}
 
 	public void deleteTaskById(String id) {

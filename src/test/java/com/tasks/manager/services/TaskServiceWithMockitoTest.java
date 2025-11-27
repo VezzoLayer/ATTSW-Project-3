@@ -4,8 +4,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -96,7 +93,7 @@ public class TaskServiceWithMockitoTest {
 
 	@Test
 	public void testUpdateTaskByIdSetsIdToArgumentAndReturnsSavedTask() {
-		Task replacement = spy(new Task(null, "repl", "repl", 0, false));
+		TaskDTO replacement = new TaskDTO(null, "repl", "repl", 0, false);
 		Task replaced = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(replaced);
@@ -105,9 +102,15 @@ public class TaskServiceWithMockitoTest {
 
 		assertThat(result).isSameAs(replaced);
 
-		InOrder inOrder = inOrder(replacement, taskRepository);
-		inOrder.verify(replacement).setId("t1");
-		inOrder.verify(taskRepository).save(replacement);
+		verify(taskRepository).save(taskCaptor.capture());
+		Task capturedTask = taskCaptor.getValue();
+
+		// Controllo i valori salvati con capture
+		assertThat(capturedTask.getId()).isEqualTo("t1");
+		assertThat(capturedTask.getTitle()).isEqualTo("repl");
+		assertThat(capturedTask.getDescription()).isEqualTo("repl");
+		assertThat(capturedTask.getPriority()).isZero();
+		assertThat(capturedTask.isDone()).isFalse();
 	}
 
 	@Test
