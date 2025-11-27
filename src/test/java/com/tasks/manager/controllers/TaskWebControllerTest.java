@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -47,6 +48,16 @@ public class TaskWebControllerTest {
 
 		when(taskService.getAllTasks()).thenReturn(tasks);
 
-		mvc.perform(get("/")).andExpect(view().name("index")).andExpect(model().attribute("tasks", tasks));
+		mvc.perform(get("/")).andExpect(view().name("index")).andExpect(model().attribute("tasks", tasks))
+				.andExpect(model().attribute("message", ""));
+	}
+
+	@Test
+	public void testHomeViewShowsMessageWhenThereAreNoTasks() throws Exception {
+		when(taskService.getAllTasks()).thenReturn(Collections.emptyList());
+
+		mvc.perform(get("/")).andExpect(view().name("index"))
+				.andExpect(model().attribute("tasks", Collections.emptyList()))
+				.andExpect(model().attribute("message", "No task to show"));
 	}
 }
