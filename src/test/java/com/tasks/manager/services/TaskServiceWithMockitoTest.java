@@ -4,8 +4,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,11 +11,13 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.repositories.TaskRepository;
 
@@ -29,6 +29,9 @@ public class TaskServiceWithMockitoTest {
 
 	@InjectMocks
 	private TaskService taskService;
+
+	@Captor
+	private ArgumentCaptor<Task> taskCaptor;
 
 	@Test
 	public void testGetAllTasks() {
@@ -67,35 +70,45 @@ public class TaskServiceWithMockitoTest {
 	}
 
 	@Test
-	public void testInsertNewTaskShouldSetIdToNullAndReturnsSavedTask() {
-		Task taskToSave = spy(new Task("t99", "", "", 0, false));
+	public void testInsertNewTaskShouldConvertDTOWithNullIdAndReturnsSavedTask() {
+		TaskDTO taskToSave = new TaskDTO("t99", "to save", "to save", 0, false);
 		Task savedTask = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
 
 		Task result = taskService.insertNewTask(taskToSave);
-
 		assertThat(result).isSameAs(savedTask);
 
-		InOrder inOrder = inOrder(taskToSave, taskRepository);
-		inOrder.verify(taskToSave).setId(null);
-		inOrder.verify(taskRepository).save(taskToSave);
+		verify(taskRepository).save(taskCaptor.capture());
+		Task capturedTask = taskCaptor.getValue();
+
+		// Controllo i valori salvati con capture
+		assertThat(capturedTask.getId()).isNull();
+		assertThat(capturedTask.getTitle()).isEqualTo("to save");
+		assertThat(capturedTask.getDescription()).isEqualTo("to save");
+		assertThat(capturedTask.getPriority()).isZero();
+		assertThat(capturedTask.isDone()).isFalse();
 	}
 
 	@Test
-	public void testUpdateTaskByIdSetsIdToArgumentAndReturnsSavedTask() {
-		Task replacement = spy(new Task(null, "repl", "repl", 0, false));
+	public void testUpdateTaskByIdShouldConvertDTOAndSetsIdToArgumentAndReturnsSavedTask() {
+		TaskDTO replacement = new TaskDTO(null, "repl", "repl", 0, false);
 		Task replaced = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(replaced);
 
 		Task result = taskService.updateTaskById("t1", replacement);
-
 		assertThat(result).isSameAs(replaced);
 
-		InOrder inOrder = inOrder(replacement, taskRepository);
-		inOrder.verify(replacement).setId("t1");
-		inOrder.verify(taskRepository).save(replacement);
+		verify(taskRepository).save(taskCaptor.capture());
+		Task capturedTask = taskCaptor.getValue();
+
+		// Controllo i valori salvati con capture
+		assertThat(capturedTask.getId()).isEqualTo("t1");
+		assertThat(capturedTask.getTitle()).isEqualTo("repl");
+		assertThat(capturedTask.getDescription()).isEqualTo("repl");
+		assertThat(capturedTask.getPriority()).isZero();
+		assertThat(capturedTask.isDone()).isFalse();
 	}
 
 	@Test
