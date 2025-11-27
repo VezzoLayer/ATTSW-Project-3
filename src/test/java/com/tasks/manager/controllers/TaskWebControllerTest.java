@@ -83,4 +83,14 @@ public class TaskWebControllerTest {
 				.andExpect(model().attribute("message", "No task to show"))
 				.andExpect(model().attribute("isSorted", true));
 	}
+
+	@Test
+	public void testEditTaskWhenTheTaskIsFound() throws Exception {
+		Task task = new Task("t1", "Low Priority", "desc", 1, false);
+
+		when(taskService.getTaskById("t1")).thenReturn(task);
+
+		mvc.perform(get("/edit/t1")).andExpect(view().name("edit")).andExpect(model().attribute("task", task))
+				.andExpect(model().attribute("message", ""));
+	}
 }
