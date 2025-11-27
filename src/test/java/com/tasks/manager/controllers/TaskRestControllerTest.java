@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -114,5 +115,10 @@ public class TaskRestControllerTest {
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.id", is("t1")))
 				.andExpect(jsonPath("$.title", is("title"))).andExpect(jsonPath("$.description", is("descr")))
 				.andExpect(jsonPath("$.priority", is(10))).andExpect(jsonPath("$.done", is(true)));
+	}
+
+	@Test
+	public void testDeleteTask() throws Exception {
+		this.mvc.perform(delete("/api/tasks/t1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
 	}
 }
