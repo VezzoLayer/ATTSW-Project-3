@@ -38,7 +38,7 @@ public class TaskWebController {
 		List<Task> orderedTasks = taskService.getAllTasksByDescendentPriority();
 
 		model.addAttribute(TASKS_ATTRIBUTE, orderedTasks);
-		model.addAttribute(MESSAGE_ATTRIBUTE, "");
+		model.addAttribute(MESSAGE_ATTRIBUTE, orderedTasks.isEmpty() ? "No task to show" : "");
 		model.addAttribute(ISSORTED_ATTRIBUTE, true);
 
 		return "index";

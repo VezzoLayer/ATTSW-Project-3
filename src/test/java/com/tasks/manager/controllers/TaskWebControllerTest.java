@@ -73,4 +73,14 @@ public class TaskWebControllerTest {
 				.andExpect(model().attribute("tasks", orderedTasks)).andExpect(model().attribute("message", ""))
 				.andExpect(model().attribute("isSorted", true));
 	}
+
+	@Test
+	public void testHomeViewOrderedShowsMessageWhenThereAreNoTasks() throws Exception {
+		when(taskService.getAllTasksByDescendentPriority()).thenReturn(Collections.emptyList());
+
+		mvc.perform(get("/ordered")).andExpect(status().isOk()).andExpect(view().name("index"))
+				.andExpect(model().attribute("tasks", Collections.emptyList()))
+				.andExpect(model().attribute("message", "No task to show"))
+				.andExpect(model().attribute("isSorted", true));
+	}
 }
