@@ -55,4 +55,12 @@ public class TaskWebController {
 
 		return "edit";
 	}
+
+	@GetMapping("/new")
+	public String newTask(Model model) {
+		model.addAttribute(TASK_ATTRIBUTE, new Task());
+		model.addAttribute(MESSAGE_ATTRIBUTE, "");
+
+		return "edit";
+	}
 }
