@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -129,5 +130,12 @@ public class TaskWebControllerTest {
 				.param("priority", "10").param("done", "true")).andExpect(view().name("redirect:/"));
 
 		verify(taskService).updateTaskById("t1", new TaskDTO("t1", "test title", "test descr", 10, true));
+	}
+
+	@Test
+	public void testDeleteTaskShouldDeleteAndRedirect() throws Exception {
+		mvc.perform(delete("/delete/t1")).andExpect(view().name("redirect:/"));
+
+		verify(taskService).deleteTaskById("t1");
 	}
 }
