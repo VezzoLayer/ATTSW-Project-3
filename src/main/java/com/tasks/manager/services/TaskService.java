@@ -30,30 +30,31 @@ public class TaskService {
 	}
 
 	public Task insertNewTask(TaskDTO taskDTO) {
-		Task persistentTask = new Task();
+		Task taskPersistent = dtoToEntity(taskDTO);
 
-		persistentTask.setId(null);
-		persistentTask.setTitle(taskDTO.getTitle());
-		persistentTask.setDescription(taskDTO.getDescription());
-		persistentTask.setPriority(taskDTO.getPriority());
-		persistentTask.setDone(taskDTO.isDone());
-
-		return taskRepository.save(persistentTask);
+		return taskRepository.save(taskPersistent);
 	}
 
 	public Task updateTaskById(String id, TaskDTO replacementDTO) {
-		Task replacementePersistent = new Task();
+		Task taskPersistent = dtoToEntity(replacementDTO);
 
-		replacementePersistent.setId(id);
-		replacementePersistent.setTitle(replacementDTO.getTitle());
-		replacementePersistent.setDescription(replacementDTO.getDescription());
-		replacementePersistent.setPriority(replacementDTO.getPriority());
-		replacementePersistent.setDone(replacementDTO.isDone());
+		taskPersistent.setId(id);
 
-		return taskRepository.save(replacementePersistent);
+		return taskRepository.save(taskPersistent);
 	}
 
 	public void deleteTaskById(String id) {
 		taskRepository.deleteById(id);
+	}
+
+	private Task dtoToEntity(TaskDTO taskDTO) {
+		Task taskPersistent = new Task();
+
+		taskPersistent.setTitle(taskDTO.getTitle());
+		taskPersistent.setDescription(taskDTO.getDescription());
+		taskPersistent.setPriority(taskDTO.getPriority());
+		taskPersistent.setDone(taskDTO.isDone());
+
+		return taskPersistent;
 	}
 }

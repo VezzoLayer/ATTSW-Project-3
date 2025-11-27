@@ -70,14 +70,13 @@ public class TaskServiceWithMockitoTest {
 	}
 
 	@Test
-	public void testInsertNewTaskShouldSetIdToNullAndReturnsSavedTask() {
+	public void testInsertNewTaskShouldConvertDTOWithNullIdAndReturnsSavedTask() {
 		TaskDTO taskToSave = new TaskDTO("t99", "to save", "to save", 0, false);
 		Task savedTask = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
 
 		Task result = taskService.insertNewTask(taskToSave);
-
 		assertThat(result).isSameAs(savedTask);
 
 		verify(taskRepository).save(taskCaptor.capture());
@@ -92,14 +91,13 @@ public class TaskServiceWithMockitoTest {
 	}
 
 	@Test
-	public void testUpdateTaskByIdSetsIdToArgumentAndReturnsSavedTask() {
+	public void testUpdateTaskByIdShouldConvertDTOAndSetsIdToArgumentAndReturnsSavedTask() {
 		TaskDTO replacement = new TaskDTO(null, "repl", "repl", 0, false);
 		Task replaced = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(replaced);
 
 		Task result = taskService.updateTaskById("t1", replacement);
-
 		assertThat(result).isSameAs(replaced);
 
 		verify(taskRepository).save(taskCaptor.capture());
