@@ -49,7 +49,7 @@ public class TaskWebControllerTest {
 		when(taskService.getAllTasks()).thenReturn(tasks);
 
 		mvc.perform(get("/")).andExpect(view().name("index")).andExpect(model().attribute("tasks", tasks))
-				.andExpect(model().attribute("message", ""));
+				.andExpect(model().attribute("message", "")).andExpect(model().attribute("isSorted", false));
 	}
 
 	@Test
@@ -58,6 +58,19 @@ public class TaskWebControllerTest {
 
 		mvc.perform(get("/")).andExpect(view().name("index"))
 				.andExpect(model().attribute("tasks", Collections.emptyList()))
-				.andExpect(model().attribute("message", "No task to show"));
+				.andExpect(model().attribute("message", "No task to show"))
+				.andExpect(model().attribute("isSorted", false));
+	}
+
+	@Test
+	public void testHomeViewShowsTasksSortedByPriorityWhenThereAreSome() throws Exception {
+		List<Task> orderedTasks = asList(new Task("t1", "High Priority", "desc", 10, false),
+				new Task("t2", "Low Priority", "desc", 1, false));
+
+		when(taskService.getAllTasksByDescendentPriority()).thenReturn(orderedTasks);
+
+		mvc.perform(get("/ordered")).andExpect(status().isOk()).andExpect(view().name("index"))
+				.andExpect(model().attribute("tasks", orderedTasks)).andExpect(model().attribute("message", ""))
+				.andExpect(model().attribute("isSorted", true));
 	}
 }

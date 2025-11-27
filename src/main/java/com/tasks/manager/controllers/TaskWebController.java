@@ -16,6 +16,7 @@ public class TaskWebController {
 
 	private static final String TASKS_ATTRIBUTE = "tasks";
 	private static final String MESSAGE_ATTRIBUTE = "message";
+	private static final String ISSORTED_ATTRIBUTE = "isSorted";
 
 	public TaskWebController(TaskService taskService) {
 		this.taskService = taskService;
@@ -27,8 +28,19 @@ public class TaskWebController {
 
 		model.addAttribute(TASKS_ATTRIBUTE, allTasks);
 		model.addAttribute(MESSAGE_ATTRIBUTE, allTasks.isEmpty() ? "No task to show" : "");
+		model.addAttribute(ISSORTED_ATTRIBUTE, false);
 
 		return "index";
 	}
 
+	@GetMapping("/ordered")
+	public String indexOrdered(Model model) {
+		List<Task> orderedTasks = taskService.getAllTasksByDescendentPriority();
+
+		model.addAttribute(TASKS_ATTRIBUTE, orderedTasks);
+		model.addAttribute(MESSAGE_ATTRIBUTE, "");
+		model.addAttribute(ISSORTED_ATTRIBUTE, true);
+
+		return "index";
+	}
 }
