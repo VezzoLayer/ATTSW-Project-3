@@ -64,4 +64,11 @@ public class TaskWebControllerHtmlUnitTest {
 		// replace /t con spazi bianchi e rimuove /r
 		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "")).isEqualTo(expectedTableContent);
 	}
+
+	@Test
+	public void testEditTaskPageTitle() throws Exception {
+		HtmlPage page = webClient.getPage("/edit/t1");
+
+		assertThat(page.getTitleText()).isEqualTo("Edit Task");
+	}
 }
