@@ -22,6 +22,7 @@
 					<th scope="col">Description</th>
 					<th scope="col">Priority</th>
 					<th scope="col">Done</th>
+					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,6 +32,13 @@
 					<td th:text="${task.description}"></td>
 					<td th:text="${task.priority}"></td>
 					<td th:text="${task.done}"></td>
+					<td>
+						<form th:action="@{'/delete/' + ${task.id}}" method="post" style="display:inline;">
+							<input type="hidden" name="_method" value="DELETE" />
+
+							<button type="submit" th:id="'btn_delete_' + ${task.id}">Delete</button>
+						</form>
+					</td>
 				</tr>
 			</tbody>
 		</table>

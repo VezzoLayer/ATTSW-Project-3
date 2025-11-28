@@ -60,12 +60,16 @@ public class TaskWebControllerHtmlUnitTest {
 
 		String expectedTableContent = """
 				Tasks
-				ID Title Description Priority Done
-				t1 title1 descr1 8 true
-				t2 title2 descr2 10 true""";
+				ID Title Description Priority Done Action
+				t1 title1 descr1 8 true Delete
+				t2 title2 descr2 10 true Delete""";
 
-		// replace /t con spazi bianchi e rimuove /r
-		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "")).isEqualTo(expectedTableContent);
+		// replace /t con spazi bianchi, rimuove /r, più spazi bianchi diventano 1
+		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "").replaceAll(" +", " ").trim())
+				.isEqualTo(expectedTableContent);
+
+		page.getHtmlElementById("btn_delete_t1");
+		page.getHtmlElementById("btn_delete_t2");
 	}
 
 	@Test
@@ -115,5 +119,15 @@ public class TaskWebControllerHtmlUnitTest {
 		form.getButtonByName("btn_submit").click();
 
 		verify(taskService).insertNewTask(new TaskDTO(null, "new title", "new description", 10, true));
+	}
+
+	@Test
+	public void testDeleteTask() throws Exception {
+		when(taskService.getAllTasks()).thenReturn(asList(new Task("t1", "Title", "Desc", 10, false)));
+
+		HtmlPage page = this.webClient.getPage("/");
+		page.getHtmlElementById("btn_delete_t1").click();
+
+		verify(taskService).deleteTaskById("t1");
 	}
 }
