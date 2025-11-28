@@ -15,7 +15,7 @@
 
 	<div th:if="${message.empty}">
 		<form name="task_form" action="#" th:action="@{/save}" th:object="${task}" method="post">
-			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{id}" th:if="${id != null}" />
 			<p>
 				Title: <input type="text" th:field="*{title}" />
 			</p>

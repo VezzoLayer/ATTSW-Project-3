@@ -100,4 +100,20 @@ public class TaskWebControllerHtmlUnitTest {
 
 		verify(taskService).updateTaskById("t1", new TaskDTO("t1", "mod title", "mod descr", 10, true));
 	}
+
+	@Test
+	public void testEditNewTask() throws Exception {
+		HtmlPage page = this.webClient.getPage("/new");
+
+		final HtmlForm form = page.getFormByName("task_form");
+
+		form.getInputByName("title").setValueAttribute("new title");
+		form.getInputByName("description").setValueAttribute("new description");
+		form.getInputByName("priority").setValueAttribute("10");
+		form.getInputByName("done").setValueAttribute("true");
+
+		form.getButtonByName("btn_submit").click();
+
+		verify(taskService).insertNewTask(new TaskDTO(null, "new title", "new description", 10, true));
+	}
 }
