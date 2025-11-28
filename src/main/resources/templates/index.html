@@ -7,7 +7,16 @@
 </head>
 
 <body>
-	No Tasks
+
+	<div th:if="${tasks.empty}">
+		<div>No Tasks</div>
+	</div>
+
+	<div th:unless="${tasks.empty}">
+		<table id="tasks_table">
+		</table>
+	</div>
+
 </body>
 
 </html>

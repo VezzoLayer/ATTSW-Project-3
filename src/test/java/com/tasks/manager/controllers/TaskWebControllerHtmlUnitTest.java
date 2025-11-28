@@ -1,11 +1,13 @@
 package com.tasks.manager.controllers;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.htmlunit.WebClient;
 import org.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlTable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
 @RunWith(SpringRunner.class)
@@ -39,5 +42,17 @@ public class TaskWebControllerHtmlUnitTest {
 		HtmlPage page = this.webClient.getPage("/");
 
 		assertThat(page.getBody().getTextContent()).contains("No Tasks");
+	}
+
+	@Test
+	public void testHomePageWithTasksShouldNotContainNoTasks() throws Exception {
+		when(taskService.getAllTasks()).thenReturn(
+				asList(new Task("t1", "title1", "descr1", 8, true), new Task("t2", "title2", "descr2", 10, true)));
+
+		HtmlPage page = this.webClient.getPage("/");
+
+		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
+
+		page.getHtmlElementById("tasks_table");
 	}
 }
