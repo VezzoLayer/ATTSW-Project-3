@@ -71,4 +71,13 @@ public class TaskWebControllerHtmlUnitTest {
 
 		assertThat(page.getTitleText()).isEqualTo("Edit Task");
 	}
+
+	@Test
+	public void testEditNonExistingTask() throws Exception {
+		when(taskService.getTaskById("t1")).thenReturn(null);
+
+		HtmlPage page = this.webClient.getPage("/edit/t1");
+
+		assertThat(page.getBody().getTextContent()).contains("No task found with id: t1");
+	}
 }
