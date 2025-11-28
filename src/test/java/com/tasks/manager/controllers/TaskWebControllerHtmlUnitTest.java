@@ -45,7 +45,7 @@ public class TaskWebControllerHtmlUnitTest {
 	}
 
 	@Test
-	public void testHomePageWithTasksShouldNotContainNoTasks() throws Exception {
+	public void testHomePageWithTasksShouldShowThemInATable() throws Exception {
 		when(taskService.getAllTasks()).thenReturn(
 				asList(new Task("t1", "title1", "descr1", 8, true), new Task("t2", "title2", "descr2", 10, true)));
 
@@ -53,6 +53,15 @@ public class TaskWebControllerHtmlUnitTest {
 
 		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
 
-		page.getHtmlElementById("tasks_table");
+		HtmlTable table = page.getHtmlElementById("tasks_table");
+
+		String expectedTableContent = """
+				Tasks
+				ID Title Description Priority Done
+				t1 title1 descr1 8 true
+				t2 title2 descr2 10 true""";
+
+		// replace /t con spazi bianchi e rimuove /r
+		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "")).isEqualTo(expectedTableContent);
 	}
 }

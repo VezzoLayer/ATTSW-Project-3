@@ -14,6 +14,25 @@
 
 	<div th:unless="${tasks.empty}">
 		<table id="tasks_table">
+			<caption>Tasks</caption>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Title</th>
+					<th scope="col">Description</th>
+					<th scope="col">Priority</th>
+					<th scope="col">Done</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="task : ${tasks}">
+					<td th:text="${task.id}"></td>
+					<td th:text="${task.title}"></td>
+					<td th:text="${task.description}"></td>
+					<td th:text="${task.priority}"></td>
+					<td th:text="${task.done}"></td>
+				</tr>
+			</tbody>
 		</table>
 	</div>
 
