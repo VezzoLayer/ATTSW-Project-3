@@ -9,7 +9,27 @@
 <body>
 	<h1>Edit Task</h1>
 
-	<span th:text="${message}"></span>
+	<div th:unless="${message.empty}">
+		<span th:text="${message}"></span>
+	</div>
+
+	<div th:if="${message.empty}">
+		<form name="task_form" action="#" th:action="@{/save}" th:object="${task}" method="post">
+			<input type="hidden" th:field="*{id}" />
+			<p>
+				Title: <input type="text" th:field="*{title}" />
+			</p>
+			<p>
+				Description: <input type="text" th:field="*{description}" />
+			</p>
+			<p>
+				Priority: <input type="text" th:field="*{priority}" />
+			</p>
+			<p>
+				Done: <input type="text" th:field="*{done}" />
+			</p>
+			<button type="submit" name="btn_submit">Save</button>
+		</form>
 </body>
 
 </html>

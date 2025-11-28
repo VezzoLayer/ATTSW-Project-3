@@ -3,9 +3,11 @@ package com.tasks.manager.controllers;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlForm;
 import org.htmlunit.html.HtmlPage;
 import org.htmlunit.html.HtmlTable;
 import org.junit.Test;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.tasks.manager.dto.TaskDTO;
 import com.tasks.manager.model.Task;
 import com.tasks.manager.services.TaskService;
 
@@ -79,5 +82,22 @@ public class TaskWebControllerHtmlUnitTest {
 		HtmlPage page = this.webClient.getPage("/edit/t1");
 
 		assertThat(page.getBody().getTextContent()).contains("No task found with id: t1");
+	}
+
+	@Test
+	public void testEditExistingTask() throws Exception {
+		when(taskService.getTaskById("t1")).thenReturn(new Task("t1", "original title", "original descr", 0, false));
+
+		HtmlPage page = this.webClient.getPage("/edit/t1");
+		final HtmlForm form = page.getFormByName("task_form");
+
+		form.getInputByValue("original title").setValueAttribute("mod title");
+		form.getInputByValue("original descr").setValueAttribute("mod descr");
+		form.getInputByValue("0").setValueAttribute("10");
+		form.getInputByValue("false").setValueAttribute("true");
+
+		form.getButtonByName("btn_submit").click();
+
+		verify(taskService).updateTaskById("t1", new TaskDTO("t1", "mod title", "mod descr", 10, true));
 	}
 }
