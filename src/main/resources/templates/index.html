@@ -18,6 +18,10 @@
 			<a th:if="${!isSorted}" th:href="@{/ordered}">
 				<button>Sort by Priority</button>
 			</a>
+
+			<a th:if="${isSorted}" th:href="@{/}">
+				<button>Remove Sorting ↑</button>
+			</a>
 		</div>
 
 		<table id="tasks_table">

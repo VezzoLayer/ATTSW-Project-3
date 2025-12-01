@@ -80,6 +80,7 @@ public class TaskWebControllerHtmlUnitTest {
 		HtmlPage page = this.webClient.getPage("/ordered");
 
 		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
+		assertThat(page.getAnchorByText("Sort by Priority").getHrefAttribute()).isEqualTo("/");
 
 		HtmlTable table = page.getHtmlElementById("tasks_table");
 
