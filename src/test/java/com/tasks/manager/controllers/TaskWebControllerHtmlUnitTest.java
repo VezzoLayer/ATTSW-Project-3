@@ -73,6 +73,7 @@ public class TaskWebControllerHtmlUnitTest {
 		page.getHtmlElementById("btn_delete_t2");
 	}
 
+	@Test
 	public void testHomePageShowsTasksInDescendingPriorityOrder() throws Exception {
 		when(taskService.getAllTasksByDescendentPriority()).thenReturn(
 				asList(new Task("t2", "title2", "descr2", 10, true), new Task("t1", "title1", "descr1", 5, false)));
@@ -80,7 +81,7 @@ public class TaskWebControllerHtmlUnitTest {
 		HtmlPage page = this.webClient.getPage("/ordered");
 
 		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
-		assertThat(page.getAnchorByText("Sort by Priority").getHrefAttribute()).isEqualTo("/");
+		assertThat(page.getAnchorByText("Remove Sorting").getHrefAttribute()).isEqualTo("/");
 
 		HtmlTable table = page.getHtmlElementById("tasks_table");
 
