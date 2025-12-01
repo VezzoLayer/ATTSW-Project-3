@@ -71,7 +71,7 @@ public class TaskServiceWithMockitoTest {
 
 	@Test
 	public void testInsertNewTaskShouldConvertDTOWithNullIdAndReturnsSavedTask() {
-		TaskDTO taskToSave = new TaskDTO("t99", "to save", "to save", 0, false);
+		TaskDTO taskToSave = new TaskDTO("t99", "to save", "to save", 5, true);
 		Task savedTask = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
@@ -86,13 +86,13 @@ public class TaskServiceWithMockitoTest {
 		assertThat(capturedTask.getId()).isNull();
 		assertThat(capturedTask.getTitle()).isEqualTo("to save");
 		assertThat(capturedTask.getDescription()).isEqualTo("to save");
-		assertThat(capturedTask.getPriority()).isZero();
-		assertThat(capturedTask.isDone()).isFalse();
+		assertThat(capturedTask.getPriority()).isEqualTo(5);
+		assertThat(capturedTask.isDone()).isTrue();
 	}
 
 	@Test
 	public void testUpdateTaskByIdShouldConvertDTOAndSetsIdToArgumentAndReturnsSavedTask() {
-		TaskDTO replacement = new TaskDTO(null, "repl", "repl", 0, false);
+		TaskDTO replacement = new TaskDTO(null, "repl", "repl", 5, true);
 		Task replaced = new Task("t1", "saved", "saved", 10, true);
 
 		when(taskRepository.save(any(Task.class))).thenReturn(replaced);
@@ -107,8 +107,8 @@ public class TaskServiceWithMockitoTest {
 		assertThat(capturedTask.getId()).isEqualTo("t1");
 		assertThat(capturedTask.getTitle()).isEqualTo("repl");
 		assertThat(capturedTask.getDescription()).isEqualTo("repl");
-		assertThat(capturedTask.getPriority()).isZero();
-		assertThat(capturedTask.isDone()).isFalse();
+		assertThat(capturedTask.getPriority()).isEqualTo(5);
+		assertThat(capturedTask.isDone()).isTrue();
 	}
 
 	@Test
