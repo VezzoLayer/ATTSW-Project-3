@@ -55,6 +55,7 @@ public class TaskWebControllerHtmlUnitTest {
 		HtmlPage page = this.webClient.getPage("/");
 
 		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
+		assertThat(page.getAnchorByText("Sort by Priority").getHrefAttribute()).isEqualTo("/ordered");
 
 		HtmlTable table = page.getHtmlElementById("tasks_table");
 
@@ -63,6 +64,30 @@ public class TaskWebControllerHtmlUnitTest {
 				ID Title Description Priority Done Action
 				t1 title1 descr1 8 true Delete
 				t2 title2 descr2 10 true Delete""";
+
+		// replace /t con spazi bianchi, rimuove /r, più spazi bianchi diventano 1
+		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "").replaceAll(" +", " ").trim())
+				.isEqualTo(expectedTableContent);
+
+		page.getHtmlElementById("btn_delete_t1");
+		page.getHtmlElementById("btn_delete_t2");
+	}
+
+	public void testHomePageShowsTasksInDescendingPriorityOrder() throws Exception {
+		when(taskService.getAllTasksByDescendentPriority()).thenReturn(
+				asList(new Task("t2", "title2", "descr2", 10, true), new Task("t1", "title1", "descr1", 5, false)));
+
+		HtmlPage page = this.webClient.getPage("/ordered");
+
+		assertThat(page.getBody().getTextContent()).doesNotContain("No Tasks");
+
+		HtmlTable table = page.getHtmlElementById("tasks_table");
+
+		String expectedTableContent = """
+				Tasks
+				ID Title Description Priority Done Action
+				t2 title2 descr2 10 true Delete
+				t1 title1 descr1 5 false Delete""";
 
 		// replace /t con spazi bianchi, rimuove /r, più spazi bianchi diventano 1
 		assertThat(table.asNormalizedText().replace("\t", " ").replace("\r", "").replaceAll(" +", " ").trim())

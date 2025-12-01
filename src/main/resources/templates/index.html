@@ -13,6 +13,13 @@
 	</div>
 
 	<div th:unless="${tasks.empty}">
+
+		<div>
+			<a th:if="${!isSorted}" th:href="@{/ordered}">
+				<button>Sort by Priority</button>
+			</a>
+		</div>
+
 		<table id="tasks_table">
 			<caption>Tasks</caption>
 			<thead>
