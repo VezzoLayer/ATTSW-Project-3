@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Tasks</title>
+</head>
+
+<body>
+
+	<div th:if="${tasks.empty}">
+		<div>No Tasks</div>
+	</div>
+
+	<div>
+		<a th:href="@{/new}">New task</a>
+	</div>
+
+	<div th:unless="${tasks.empty}">
+
+		<div>
+			<a th:if="${!isSorted}" th:href="@{/ordered}">
+				<button>Sort by Priority</button>
+			</a>
+
+			<a th:if="${isSorted}" th:href="@{/}">
+				<button>Remove Sorting</button>
+			</a>
+		</div>
+
+		<table id="tasks_table">
+			<caption>Tasks</caption>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Title</th>
+					<th scope="col">Description</th>
+					<th scope="col">Priority</th>
+					<th scope="col">Done</th>
+					<th scope="col">Action</th>
+					<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="task : ${tasks}">
+					<td th:text="${task.id}"></td>
+					<td th:text="${task.title}"></td>
+					<td th:text="${task.description}"></td>
+					<td th:text="${task.priority}"></td>
+					<td th:text="${task.done}"></td>
+					<td><a th:href="@{'/edit/' + ${task.id}}">Edit</a></td>
+					<td>
+						<form th:action="@{'/delete/' + ${task.id}}" method="post" style="display:inline;">
+							<input type="hidden" name="_method" value="DELETE" />
+
+							<button type="submit" th:id="'btn_delete_' + ${task.id}">Delete</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+
+</html>
