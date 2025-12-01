@@ -157,4 +157,11 @@ public class TaskWebControllerHtmlUnitTest {
 
 		verify(taskService).deleteTaskById("t1");
 	}
+
+	@Test
+	public void testHomePageShouldProvideALinkForCreatingANewTask() throws Exception {
+		HtmlPage page = this.webClient.getPage("/");
+
+		assertThat(page.getAnchorByText("New task").getHrefAttribute()).isEqualTo("/new");
+	}
 }

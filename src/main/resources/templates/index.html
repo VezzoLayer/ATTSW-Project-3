@@ -12,6 +12,10 @@
 		<div>No Tasks</div>
 	</div>
 
+	<div>
+		<a th:href="@{/new}">New task</a>
+	</div>
+
 	<div th:unless="${tasks.empty}">
 
 		<div>
