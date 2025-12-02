@@ -75,4 +75,16 @@ public class TaskServiceRepositoryIT {
 
 		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
 	}
+
+	@Test
+	public void testTaskRepositoryCorrectlyFindsTasksWithHighPriority() {
+		Task taskShouldBeFound1 = taskService.insertNewTask(new TaskDTO(null, "t1", "d1", 10, false));
+		Task taskShouldBeFound2 = taskService.insertNewTask(new TaskDTO(null, "t2", "d2", 9, true));
+
+		taskService.insertNewTask(new TaskDTO(null, "title", "descr", 4, false));
+
+		List<Task> tasks = taskRepository.findAllTasksWithHighPriority(8);
+
+		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
+	}
 }
