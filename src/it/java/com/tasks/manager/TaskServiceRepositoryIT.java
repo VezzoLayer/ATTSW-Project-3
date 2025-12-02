@@ -54,7 +54,7 @@ public class TaskServiceRepositoryIT {
 	}
 
 	@Test
-	public void testServiceRetrieveAllTasksByPriority() {
+	public void testServiceCorrectlyFindsAllTasksByPriority() {
 		Task low = taskRepository.save(new Task("t1", "Low Prio", "desc", 1, false));
 		Task high = taskRepository.save(new Task("t2", "High Prio", "desc", 10, false));
 		Task medium = taskRepository.save(new Task("t3", "Medium Prio", "desc", 5, false));
@@ -62,5 +62,17 @@ public class TaskServiceRepositoryIT {
 		List<Task> tasks = taskService.getAllTasksByDescendentPriority();
 
 		assertThat(tasks).containsExactly(high, medium, low);
+	}
+
+	@Test
+	public void testTaskRepositoryCorrectlyFindsTasksWithHighPriorityAndDone() {
+		Task taskShouldBeFound1 = taskService.insertNewTask(new TaskDTO(null, "t1", "d1", 10, false));
+		Task taskShouldBeFound2 = taskService.insertNewTask(new TaskDTO(null, "t2", "d2", 8, false));
+
+		taskService.insertNewTask(new TaskDTO(null, "title", "descr", 7, false));
+
+		List<Task> tasks = taskRepository.findByPriorityGreaterThanAndDone(7, false);
+
+		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
 	}
 }
