@@ -40,4 +40,14 @@ public class TaskServiceRepositoryIT {
 
 		assertThat(taskRepository.findById(savedTask.getId())).isPresent();
 	}
+
+	@Test
+	public void testServiceCanUpdateTaskRepository() {
+		Task savedTask = taskRepository.save(new Task(null, "title", "descr", 10, false));
+
+		Task modifiedTask = taskService.updateTaskById(savedTask.getId(),
+				new TaskDTO(savedTask.getId(), "mod", "mod", 5, true));
+
+		assertThat(taskRepository.findById(savedTask.getId())).contains(modifiedTask);
+	}
 }
