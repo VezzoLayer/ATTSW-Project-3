@@ -2,6 +2,8 @@ package com.tasks.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,5 +51,16 @@ public class TaskServiceRepositoryIT {
 				new TaskDTO(savedTask.getId(), "mod", "mod", 5, true));
 
 		assertThat(taskRepository.findById(savedTask.getId())).contains(modifiedTask);
+	}
+
+	@Test
+	public void testServiceRetrieveAllTasksByPriority() {
+		Task low = taskRepository.save(new Task("t1", "Low Prio", "desc", 1, false));
+		Task high = taskRepository.save(new Task("t2", "High Prio", "desc", 10, false));
+		Task medium = taskRepository.save(new Task("t3", "Medium Prio", "desc", 5, false));
+
+		List<Task> tasks = taskService.getAllTasksByDescendentPriority();
+
+		assertThat(tasks).containsExactly(high, medium, low);
 	}
 }
