@@ -78,4 +78,31 @@ public class TaskWebControllerIT {
 		assertThat(taskRepository.findByTitle("new title")).usingRecursiveComparison().ignoringFields("id")
 				.isEqualTo(new Task(null, "new title", "new descr", 10, true));
 	}
+
+	@Test
+	public void testEditPageUpdateTask() {
+		Task task = taskRepository.save(new Task(null, "title update", "descr", 8, false));
+		driver.get(baseUrl + "/edit/" + task.getId());
+
+		final WebElement titleField = driver.findElement(By.name("title"));
+		titleField.clear();
+		titleField.sendKeys("modified title");
+
+		final WebElement descriptionField = driver.findElement(By.name("description"));
+		descriptionField.clear();
+		descriptionField.sendKeys("modified descr");
+
+		final WebElement priorityField = driver.findElement(By.name("priority"));
+		priorityField.clear();
+		priorityField.sendKeys("10");
+
+		final WebElement doneField = driver.findElement(By.name("done"));
+		doneField.clear();
+		doneField.sendKeys("true");
+
+		driver.findElement(By.name("btn_submit")).click();
+
+		assertThat(taskRepository.findByTitle("modified title")).usingRecursiveComparison().ignoringFields("id")
+				.isEqualTo(new Task(null, "modified title", "modified descr", 10, true));
+	}
 }
