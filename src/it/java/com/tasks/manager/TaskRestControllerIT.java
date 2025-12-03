@@ -2,6 +2,7 @@ package com.tasks.manager;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,5 +47,15 @@ public class TaskRestControllerIT {
 		Task savedTask = response.getBody().as(Task.class);
 
 		assertThat(taskRepository.findById(savedTask.getId())).contains(savedTask);
+	}
+
+	@Test
+	public void testUpdateTask() {
+		Task savedTask = taskRepository.save(new Task(null, "original title", "original descr", 5, false));
+
+		given().contentType(MediaType.APPLICATION_JSON_VALUE).body(new Task(null, "mod title", "mod descr", 10, true))
+				.when().put("/api/tasks/update/" + savedTask.getId()).then().statusCode(200).body("id",
+						equalTo(savedTask.getId()), "title", equalTo("mod title"), "description", equalTo("mod descr"),
+						"priority", equalTo(10), "done", equalTo(true));
 	}
 }
