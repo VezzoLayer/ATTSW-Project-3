@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,5 +59,23 @@ public class TaskWebControllerIT {
 		driver.findElement(By.cssSelector("a[href*='/edit/" + task.getId() + "']"));
 		driver.findElement(By.cssSelector("form[action*='/delete/" + task.getId() + "']"));
 		driver.findElement(By.cssSelector("a[href*='/ordered']"));
+	}
+
+	@Test
+	public void testEditPageNewTask() {
+		driver.get(baseUrl + "/new");
+
+		driver.findElement(By.name("title")).sendKeys("new title");
+		driver.findElement(By.name("description")).sendKeys("new descr");
+		driver.findElement(By.name("priority")).sendKeys("10");
+
+		WebElement doneField = driver.findElement(By.name("done"));
+		doneField.clear();
+		doneField.sendKeys("true");
+
+		driver.findElement(By.name("btn_submit")).click();
+
+		assertThat(taskRepository.findByTitle("new title")).usingRecursiveComparison().ignoringFields("id")
+				.isEqualTo(new Task(null, "new title", "new descr", 10, true));
 	}
 }
