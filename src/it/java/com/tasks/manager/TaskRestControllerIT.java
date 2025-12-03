@@ -58,4 +58,13 @@ public class TaskRestControllerIT {
 						equalTo(savedTask.getId()), "title", equalTo("mod title"), "description", equalTo("mod descr"),
 						"priority", equalTo(10), "done", equalTo(true));
 	}
+
+	@Test
+	public void testGetTaskById() {
+		Task savedTask = taskRepository.save(new Task(null, "title", "descr", 8, true));
+
+		given().accept(MediaType.APPLICATION_JSON_VALUE).when().get("/api/tasks/" + savedTask.getId()).then()
+				.statusCode(200).body("id", equalTo(savedTask.getId())).body("title", equalTo("title"))
+				.body("description", equalTo("descr")).body("priority", equalTo(8)).body("done", equalTo(true));
+	}
 }
