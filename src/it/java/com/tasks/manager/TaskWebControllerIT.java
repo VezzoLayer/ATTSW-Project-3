@@ -69,6 +69,26 @@ public class TaskWebControllerIT {
 	}
 
 	@Test
+	public void testHomePageWhenTasksArePresentAndOrdered() {
+		Task task1 = taskRepository.save(new Task(null, "title task1", "descr", 8, true));
+		Task task2 = taskRepository.save(new Task(null, "title task2", "descr", 10, true));
+
+		driver.get(baseUrl + "/ordered");
+
+		String tableText = driver.findElement(By.id("tasks_table")).getText();
+
+		assertThat(tableText).contains("title task1", "title task2", "descr", "8", "10", "true", "Edit", "Delete");
+		// Controllo che task2 sia prima di task1
+		assertThat(tableText.indexOf("title task2")).isLessThan(tableText.indexOf("title task1"));
+
+		driver.findElement(By.cssSelector("a[href*='/edit/" + task1.getId() + "']"));
+		driver.findElement(By.cssSelector("form[action*='/delete/" + task1.getId() + "']"));
+		driver.findElement(By.cssSelector("a[href*='/edit/" + task2.getId() + "']"));
+		driver.findElement(By.cssSelector("form[action*='/delete/" + task2.getId() + "']"));
+		driver.findElement(By.cssSelector("a[href*='/']"));
+	}
+
+	@Test
 	public void testEditPageNewTask() {
 		driver.get(baseUrl + "/new");
 
