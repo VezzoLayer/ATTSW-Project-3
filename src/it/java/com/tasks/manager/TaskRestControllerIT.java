@@ -79,4 +79,17 @@ public class TaskRestControllerIT {
 				.body("title", contains("title1", "title2")).body("description", contains("descr1", "descr2"))
 				.body("priority", contains(8, 9)).body("done", contains(true, false));
 	}
+
+	@Test
+	public void testGetAllTasksOrderedByDescendentPriority() {
+		Task taskMedium = taskRepository.save(new Task(null, "medium", "descr", 8, true));
+		Task taskLow = taskRepository.save(new Task(null, "low", "descr", 5, true));
+		Task taskHigh = taskRepository.save(new Task(null, "high", "descr", 10, true));
+
+		given().accept(MediaType.APPLICATION_JSON_VALUE).when().get("/api/tasks/ordered").then().statusCode(200)
+				.body("size()", equalTo(3)).body("id", contains(taskHigh.getId(), taskMedium.getId(), taskLow.getId()))
+				.body("title", contains("high", "medium", "low"))
+				.body("description", contains("descr", "descr", "descr")).body("priority", contains(10, 8, 5))
+				.body("done", contains(true, true, true));
+	}
 }
