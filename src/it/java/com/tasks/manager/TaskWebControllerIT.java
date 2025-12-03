@@ -49,6 +49,13 @@ public class TaskWebControllerIT {
 	}
 
 	@Test
+	public void testHomePageWhenNoTasksArePresent() {
+		driver.get(baseUrl);
+
+		assertThat(driver.findElement(By.tagName("body")).getText()).contains("No Tasks");
+	}
+
+	@Test
 	public void testHomePageWhenTasksArePresent() {
 		Task task = taskRepository.save(new Task(null, "title", "descr", 10, true));
 		driver.get(baseUrl);
