@@ -51,8 +51,8 @@
 		</sonar.sources>
 		<!-- Rileva ulteriori tests configurati nel build-helper-maven-plugin -->
 		<sonar.tests>
-			${project.build.testSourceDirectory}
-			<!-- ${basedir}/src/it/java, -->
+			${project.build.testSourceDirectory},
+			${basedir}/src/it/java
 			<!-- ${basedir}/src/bdd/java -->
 		</sonar.tests>
 		<!-- Esclude Model, DTO e Application -->
@@ -96,6 +96,12 @@
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo.spring3x</artifactId>
 			<version>4.21.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -124,6 +130,22 @@
 		<dependency>
 			<groupId>org.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>htmlunit-driver</artifactId>
+			<version>4.13.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-support</artifactId>
 			<scope>test</scope>
 		</dependency>
 		
@@ -177,6 +199,39 @@
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.46.0</version>
+				<configuration>
+					<images>
+						<image>
+							<name>mongo:8.2.2</name>
+							<run>
+								<ports>
+									<port>27017:27017</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<id>docker-start</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>docker-stop</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
 						</goals>
 					</execution>
 				</executions>
