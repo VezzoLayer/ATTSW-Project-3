@@ -119,6 +119,7 @@ public class TaskRestControllerTest {
 
 	@Test
 	public void testDeleteTask() throws Exception {
-		this.mvc.perform(delete("/api/tasks/t1").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
+		this.mvc.perform(delete("/api/tasks/delete/t1").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
 	}
 }

@@ -87,4 +87,13 @@ public class TaskServiceRepositoryIT {
 
 		assertThat(tasks).containsExactly(taskShouldBeFound1, taskShouldBeFound2);
 	}
+
+	@Test
+	public void testServiceCanDeleteTaskFromRepository() {
+		Task savedTask = taskRepository.save(new Task(null, "title", "descr", 10, false));
+
+		taskService.deleteTaskById(savedTask.getId());
+
+		assertThat(taskRepository.findById(savedTask.getId())).isNotPresent();
+	}
 }
