@@ -92,4 +92,14 @@ public class TaskRestControllerIT {
 				.body("description", contains("descr", "descr", "descr")).body("priority", contains(10, 8, 5))
 				.body("done", contains(true, true, true));
 	}
+
+	@Test
+	public void testDeleteTaskById() {
+		Task savedTask = taskRepository.save(new Task(null, "title", "descr", 8, true));
+
+		given().accept(MediaType.APPLICATION_JSON_VALUE).when().delete("/api/tasks/" + savedTask.getId()).then()
+				.statusCode(204);
+
+		assertThat(taskRepository.findById(savedTask.getId())).isNotPresent();
+	}
 }
