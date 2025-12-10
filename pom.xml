@@ -68,7 +68,6 @@
 		<sonar.cpd.exclusions>
 			**/dto/*
 		</sonar.cpd.exclusions>	
-		
 	</properties>
 
 	<dependencies>
@@ -151,7 +150,7 @@
 			<artifactId>selenium-support</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -176,7 +175,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -268,7 +266,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -406,8 +404,8 @@
 				</plugins>
 			</build>
 		</profile>
-		
-<!-- Profilo per l'esecuzione solitaria e2e-tests -->
+
+		<!-- Profilo per l'esecuzione solitaria e2e-tests -->
 		<profile>
 			<id>e2e-tests</id>
 			<activation>
