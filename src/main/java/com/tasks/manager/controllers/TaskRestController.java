@@ -52,7 +52,7 @@ public class TaskRestController {
 		return taskService.updateTaskById(id, taskDTO);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTask(@PathVariable String id) {
 		taskService.deleteTaskById(id);

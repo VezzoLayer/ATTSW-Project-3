@@ -97,7 +97,7 @@ public class TaskRestControllerIT {
 	public void testDeleteTaskById() {
 		Task savedTask = taskRepository.save(new Task(null, "title", "descr", 8, true));
 
-		given().accept(MediaType.APPLICATION_JSON_VALUE).when().delete("/api/tasks/" + savedTask.getId()).then()
+		given().accept(MediaType.APPLICATION_JSON_VALUE).when().delete("/api/tasks/delete/" + savedTask.getId()).then()
 				.statusCode(204);
 
 		assertThat(taskRepository.findById(savedTask.getId())).isNotPresent();
