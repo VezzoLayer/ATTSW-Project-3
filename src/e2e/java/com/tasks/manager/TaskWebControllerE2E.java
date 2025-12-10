@@ -106,6 +106,18 @@ public class TaskWebControllerE2E { // NOSONAR not a standard testcase name
 				"modified description", "10", "true");
 	}
 
+	@Test
+	public void testDeleteTask() throws JSONException {
+		String id = postTask("title to del", "descr to del", 5, true);
+
+		driver.get(baseUrl);
+
+		driver.findElement(By.id("btn_delete_" + id)).click();
+
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tasks_table")));
+		assertThat(driver.findElement(By.id("tasks_table")).getText()).doesNotContain("title to del", "descr to del");
+	}
+
 	private String postTask(String title, String description, int priority, boolean done) throws JSONException {
 		JSONObject body = new JSONObject();
 
