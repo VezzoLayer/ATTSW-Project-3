@@ -2,6 +2,8 @@ package com.tasks.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Duration;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -12,6 +14,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -27,14 +31,15 @@ public class TaskWebControllerE2E { // NOSONAR not a standard testcase name
 	private static final Logger LOGGER = LoggerFactory.getLogger(TaskWebControllerE2E.class);
 
 	private static int port = Integer.parseInt(System.getProperty("server.port", "8080"));
-
 	private static String baseUrl = "http://localhost:" + port;
 
 	private WebDriver driver;
+	private WebDriverWait wait;
+
+	private static final int TIMEOUT_SECONDS = 10;
 
 	@BeforeClass
 	public static void setupClass() {
-		// setup Chrome Driver
 		WebDriverManager.chromedriver().setup();
 	}
 
@@ -42,6 +47,8 @@ public class TaskWebControllerE2E { // NOSONAR not a standard testcase name
 	public void setup() {
 		baseUrl = "http://localhost:" + port;
 		driver = new ChromeDriver();
+
+		wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_SECONDS));
 	}
 
 	@After
@@ -65,6 +72,7 @@ public class TaskWebControllerE2E { // NOSONAR not a standard testcase name
 
 		driver.findElement(By.name("btn_submit")).click();
 
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tasks_table")));
 		assertThat(driver.findElement(By.id("tasks_table")).getText()).contains("new task", "new descr", "10", "false");
 	}
 
@@ -93,6 +101,7 @@ public class TaskWebControllerE2E { // NOSONAR not a standard testcase name
 
 		driver.findElement(By.name("btn_submit")).click();
 
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tasks_table")));
 		assertThat(driver.findElement(By.id("tasks_table")).getText()).contains("modified title",
 				"modified description", "10", "true");
 	}
