@@ -132,4 +132,14 @@ public class TaskWebControllerIT {
 		assertThat(taskRepository.findByTitle("modified title")).usingRecursiveComparison().ignoringFields("id")
 				.isEqualTo(new Task(null, "modified title", "modified descr", 10, true));
 	}
+
+	@Test
+	public void testHomePageDeleteTask() {
+		Task task = taskRepository.save(new Task(null, "title del", "descr del", 5, true));
+
+		driver.get(baseUrl);
+		driver.findElement(By.id("btn_delete_" + task.getId())).click();
+
+		assertThat(driver.findElement(By.tagName("body")).getText()).contains("No Tasks");
+	}
 }
