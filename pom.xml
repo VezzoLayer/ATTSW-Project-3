@@ -170,6 +170,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -442,6 +449,7 @@
 								<configuration>
 									<arguments>
 										<argument>--server.port=${tomcat.http.port}</argument>
+										<argument>--spring.docker.compose.enabled=false</argument>
 									</arguments>
 								</configuration>
 							</execution>
