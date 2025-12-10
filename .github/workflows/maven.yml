@@ -53,6 +53,10 @@ jobs:
         mvn surefire-report:report-only site:site -DgenerateReports=false
       working-directory: ${{ env.workdir }}
 
+    - name: Run e2e tests with xvfb
+      run: >
+        xvfb-run mvn verify -Pe2e-tests
+
     - name: SonarCloud Analysis
       run: >
         mvn sonar:sonar
