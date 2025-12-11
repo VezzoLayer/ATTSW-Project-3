@@ -323,9 +323,11 @@
 					<configuration>
 						<targetClasses>
 							<param>com.tasks.manager.services*</param>
+							<param>com.tasks.manager.controllers*</param>
 						</targetClasses>
 						<targetTests>
 							<param>com.tasks.manager.services*</param>
+							<param>com.tasks.manager.controllers*</param>
 						</targetTests>
 						<mutators>
 							<mutator>STRONGER</mutator>
@@ -373,6 +375,19 @@
 						<!-- Configurato in pluginManagment -->
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-maven</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- Profilo per l'esecuzione di jacoco -->
+		<profile>
+			<id>jacoco</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
 					</plugin>
 				</plugins>
 			</build>
